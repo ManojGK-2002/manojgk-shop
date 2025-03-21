@@ -40,15 +40,50 @@ TemplateMo 571 Hexashop
 https://templatemo.com/tm-571-hexashop
 
 -->
+<style>
+    body {
+  cursor: none;
+}
+
+   .tree-cursor {
+    position: fixed; /* Keeps it on top */
+    z-index: 9999;
+    font-size: 30px;
+    pointer-events: none;
+    transform: translate(-50%, -50%) rotate(-22deg); /* Rotates the tree slightly */
+  }
+
+  /* Falling Leaves & Fruits */
+  .falling-item {
+    position: fixed; 
+    z-index: 9999;  /* Keeps it on top */
+    font-size: 15px;
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 2s ease-out;
+  }
+
+  @keyframes fall {
+    0% {
+      transform: translateY(0px) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(400px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+</style>
     </head>
     
     <body>
     
-
+   <div class="tree-cursor">🌲</div>
     <!-- ***** Preloader End ***** -->
     
     
     <!-- ***** Header Area Start ***** -->
+     
     <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
@@ -70,7 +105,7 @@ https://templatemo.com/tm-571-hexashop
                                 <a href="about.html" class="about-link" style="border-radius: 25px;background-color: rgba(21, 111, 159, 0.314); padding: 2px 14px;color: rgb(16, 130, 16); font:bold; font-size: 20px;">About Us</a>
                             </li>
                                                        
-                          
+                         
                         </ul>        
                         <a class='menu-trigger'>
                             <span>Menu</span>
@@ -915,20 +950,34 @@ https://templatemo.com/tm-571-hexashop
                         <br>Art By: <a href="https://www.instagram.com/globalknowledge4/" target="_parent" title="free css templates">Geetha B</a>
                         <br>Design: <a href="https://www.youtube.com/@G_Global-K_Knowledge." target="_parent" title="free css templates">Manoj G K</a>
                     </p>
-                    <div class="image" data-aos="zoom-out" data-aos-duration="3000">
-                        <img 
-  src="./Geetha/byclile.png" 
-  alt="" 
-  style="
-    width: 200px; 
-    margin-left: 0px; 
-    transition: transform 0.3s ease;
-    transform: scale(1);
-  "
-  onmouseover="this.style.transform='scale(1.2)'"
-  onmouseout="this.style.transform='scale(1)'"
->
-                    </div>
+                <!-- Image Container with AOS Animation -->
+<div class="image" data-aos="zoom-out" data-aos-duration="3000" data-aos-once="true">
+    <img 
+        src="./Geetha/byclile.png" 
+        alt="Bicycle Image" 
+        style="
+            width: 200px; 
+            margin-left: 0px; 
+            transition: transform 0.3s ease;
+            transform: scale(1);
+        "
+        onmouseover="this.style.transform='scale(1.2)'" 
+        onmouseout="this.style.transform='scale(1)'"
+    >
+</div>
+
+<!-- AOS Library -->
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<!-- Initialize AOS with Correct Settings -->
+<script>
+    AOS.init({
+        once: true, // Prevents elements from disappearing after animation
+        duration: 1000, // Adjust animation speed (optional)
+        disable: "mobile" // Optional: Disables AOS on mobile for better performance
+    });
+</script>
+
                
                         <ul>
                             <li><a href="https://www.instagram.com/globalknowledge4/"><i class="fa fa-instagram"></i></a></li>
@@ -967,23 +1016,48 @@ https://templatemo.com/tm-571-hexashop
     <!-- Global Init -->
     <script src="assets/js/custom.js"></script>
 
-    <script>
-
-        $(function() {
-            var selectedClass = "";
-            $("p").click(function(){
-            selectedClass = $(this).attr("data-rel");
-            $("#portfolio").fadeTo(50, 0.1);
-                $("#portfolio div").not("."+selectedClass).fadeOut();
-            setTimeout(function() {
-              $("."+selectedClass).fadeIn();
-              $("#portfolio").fadeTo(50, 1);
-            }, 500);
-                
-            });
-        });
-  AOS.init();
+   
     </script>
+    <script>
+        const treeCursor = document.querySelector('.tree-cursor');
+      
+        // List of leaves and fruits
+        const items = ['🍃', '🌿', '🍂', '🍁', '🌱', '🍎', '🍌', '🍊', '🍇', '🍒', '🥭', '🍍'];
+        let lastTime = 0;
+        const delay = 300; // Delay between falling items
+      
+        // Move the tree cursor with mouse
+        window.addEventListener('mousemove', (e) => { 
+            treeCursor.style.left = `${e.clientX}px`;
+            treeCursor.style.top = `${e.clientY}px`;
+        });
+      
+        // Create falling leaves & fruits from tree cursor position
+        document.addEventListener('mousemove', (e) => {
+          const now = Date.now();
+          if (now - lastTime < delay) return;
+          lastTime = now;
+      
+          let fallingItem = document.createElement('div');
+          fallingItem.classList.add('falling-item');
+          fallingItem.innerHTML = items[Math.floor(Math.random() * items.length)];
+          document.body.appendChild(fallingItem);
+      
+          const size = Math.random() * 15 + 10; // Random size
+          const fallTime = Math.random() * 5 + 5; // Random duration (5-10 sec)
+      
+    
+fallingItem.style.left = `${e.pageX}px`;
+fallingItem.style.top = `${e.pageY}px`;
+          fallingItem.style.fontSize = `${size}px`;
+          fallingItem.style.position = "absolute";
+          fallingItem.style.animation = `fall ${fallTime}s linear forwards`;
+      
+          setTimeout(() => {
+            fallingItem.remove();
+          }, fallTime * 1000);
+        });
+      </script>
 
   </body>
 </html>
